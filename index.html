@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deriv Dual-Panel Automated Terminal - Over 0 & Under 9</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Deriv Dual-Panel Terminal - Real Automation Bridge</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,650 +12,118 @@
             theme: {
                 extend: {
                     colors: {
-                        slate: {
-                            850: '#111827',
-                            900: '#0f172a',
-                            950: '#020617',
-                        },
-                        neon: {
-                            green: '#00e676',
-                            emerald: '#10b981',
-                            rose: '#ef4444',
-                            blue: '#38bdf8',
-                            purple: '#a855f7'
-                        }
+                        darkBg: '#050811',
+                        panelBg: '#0b1120',
+                        cardBg: '#111827',
+                        neonGreen: '#10b981',
+                        neonRed: '#ef4444',
+                        neonBlue: '#38bdf8',
+                        neonPurple: '#a855f7'
                     }
                 }
             }
         }
     </script>
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #040711;
-        }
-        .font-mono-code {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #090d16;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #050811; color: #f3f4f6; }
+        .font-mono-code { font-family: 'JetBrains Mono', monospace; }
         
-        /* Neon Glow Effects */
-        .glow-emerald {
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
-        }
-        .glow-rose {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
-        }
-
-        /* Pulsing Animations for Active Bots */
-        .pulse-active-emerald {
-            animation: pulseEmerald 1.8s infinite;
-        }
-        .pulse-active-rose {
-            animation: pulseRose 1.8s infinite;
-        }
-        @keyframes pulseEmerald {
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #050811; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        
+        .pulse-green { animation: pulseGreen 1.6s infinite; }
+        .pulse-red { animation: pulseRed 1.6s infinite; }
+        @keyframes pulseGreen {
             0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+            70% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
             100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
-        @keyframes pulseRose {
+        @keyframes pulseRed {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+            70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
-
-        /* Trigger Flash Visualizer */
-        .click-flash-green {
-            animation: flashGreen 0.6s ease-out;
-        }
-        .click-flash-red {
-            animation: flashRed 0.6s ease-out;
-        }
-        @keyframes flashGreen {
-            0% { border-color: #10b981; box-shadow: inset 0 0 30px rgba(16, 185, 129, 0.8); }
-            100% { border-color: #1e293b; box-shadow: inset 0 0 0px rgba(16, 185, 129, 0); }
-        }
-        @keyframes flashRed {
-            0% { border-color: #ef4444; box-shadow: inset 0 0 30px rgba(239, 68, 68, 0.8); }
-            100% { border-color: #1e293b; box-shadow: inset 0 0 0px rgba(239, 68, 68, 0); }
-        }
+        
+        .flash-emerald { animation: flashG 0.5s ease-out; }
+        .flash-rose { animation: flashR 0.5s ease-out; }
+        @keyframes flashG { 0% { border-color: #10b981; box-shadow: inset 0 0 25px rgba(16,185,129,0.6); } 100% { border-color: #1f2937; } }
+        @keyframes flashR { 0% { border-color: #ef4444; box-shadow: inset 0 0 25px rgba(239,68,68,0.6); } 100% { border-color: #1f2937; } }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-white overflow-x-hidden">
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- TOP GLOBAL HEADER BAR -->
-    <header class="bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
-        <div class="max-w-[1920px] mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-4">
-            
-            <!-- Branding -->
+    <!-- TOP HEADER -->
+    <header class="bg-slate-950/90 backdrop-blur border-b border-slate-800 sticky top-0 z-40">
+        <div class="max-w-[1920px] mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-cyan-500 to-rose-500 p-0.5 shadow-lg shadow-cyan-950/40">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-cyan-500 to-rose-500 p-0.5 shadow-lg shadow-cyan-950/50">
                     <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                        <i class="fa-solid fa-bolt text-lg text-cyan-400"></i>
+                        <i class="fa-solid fa-bolt text-cyan-400 text-sm"></i>
                     </div>
                 </div>
                 <div>
-                    <h1 class="text-base font-extrabold tracking-tight text-white flex items-center gap-2">
-                        DERIV DUAL-PANEL AUTOMATED TERMINAL
-                        <span class="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 tracking-wider">v3.0 LIVE</span>
+                    <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-white flex items-center gap-2">
+                        DERIV REAL-CLICK AUTOMATED TERMINAL
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">v4.0 DOM-BRIDGE</span>
                     </h1>
-                    <p class="text-xs text-slate-400">High-Speed Volatility 100 Digit Scanner (Over 0 / Under 9 Execution Engine)</p>
+                    <p class="text-xs text-slate-400">Direct DOM Click Automation via Tampermonkey Bridge</p>
                 </div>
             </div>
 
-            <!-- WebSocket & Last Digit Live Ticker -->
-            <div class="flex items-center bg-slate-900/90 px-4 py-1.5 rounded-xl border border-slate-800 space-x-4">
-                <div class="flex items-center space-x-2">
-                    <span class="relative flex h-3 w-3">
-                      <span id="ws-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span id="ws-dot" class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                    </span>
-                    <span id="ws-status" class="text-xs font-mono font-semibold text-slate-300">DERIV WS: CONNECTED</span>
-                </div>
-
-                <div class="h-4 w-px bg-slate-800"></div>
-
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs text-slate-400 font-medium">LAST DIGIT:</span>
-                    <span id="header-last-digit" class="text-xl font-bold font-mono text-cyan-400 bg-slate-950 px-3 py-0.5 rounded-lg border border-cyan-500/30 min-w-[36px] text-center shadow-inner">--</span>
-                </div>
-
-                <div class="h-4 w-px bg-slate-800 hidden md:block"></div>
-
-                <!-- Live Digit Feed -->
-                <div id="digit-history-bar" class="hidden md:flex items-center space-x-1 font-mono text-xs">
-                    <!-- Dynamic live digit elements appended here -->
-                </div>
-            </div>
-
-            <!-- Controls -->
+            <!-- Bridge Status & Script Modal Trigger -->
             <div class="flex items-center space-x-3">
-                <button onclick="clearAllLogs()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-800 transition">
-                    <i class="fa-solid fa-broom mr-1"></i> Clear Logs
+                <div id="bridge-status-indicator" class="flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
+                    <span id="bridge-dot" class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span id="bridge-text" class="text-xs font-mono text-slate-300">BRIDGE: WAITING FOR SCRIPT</span>
+                </div>
+
+                <button onclick="openScriptModal()" class="px-3.5 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-lg border border-cyan-400/30 shadow-lg shadow-cyan-950/50 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-code"></i> Get Tampermonkey Script
                 </button>
-                <button onclick="emergencyStopAll()" class="px-4 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white text-xs font-bold border border-rose-500/40 transition shadow-lg shadow-rose-950/50 flex items-center gap-1.5">
+
+                <button onclick="emergencyStop()" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white text-xs font-bold rounded-lg border border-rose-500/30 transition">
                     <i class="fa-solid fa-power-off"></i> STOP ALL
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN DUAL SECTION LAYOUT -->
+    <!-- MAIN DUAL-PANEL LAYOUT -->
     <main class="flex-1 max-w-[1920px] w-full mx-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-        <!-- ================================================================= -->
-        <!-- LEFT PANEL: OVER 0 AUTOMATED STRATEGY                             -->
-        <!-- ================================================================= -->
-        <section id="panel-over0-container" class="flex flex-col bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 shadow-2xl overflow-hidden transition-all duration-300">
+        <!-- ================= LEFT SECTION: OVER 0 ================= -->
+        <section id="panel-left" class="flex flex-col bg-slate-900/80 backdrop-blur rounded-2xl border border-slate-800 shadow-2xl overflow-hidden transition">
             
             <!-- Panel Header -->
-            <div class="p-4 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border-b border-slate-800 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-lg">
+            <div class="p-3.5 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-sm">
                         <i class="fa-solid fa-arrow-trend-up"></i>
                     </div>
                     <div>
-                        <h2 class="font-extrabold text-sm sm:text-base text-slate-100 flex items-center gap-2">
+                        <h2 class="font-bold text-sm text-slate-100 flex items-center gap-2">
                             LEFT SECTION: OVER 0 TRADER
-                            <span class="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">FIXED: OVER 0</span>
+                            <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">DIGIT 0</span>
                         </h2>
-                        <p class="text-xs text-slate-400">Triggers trade continuously when digit <b class="text-emerald-400">0</b> appears</p>
+                        <p class="text-[11px] text-slate-400">Clicks <b class="text-emerald-400">Buy Over 0</b> on Vercel DOM when last digit = 0</p>
                     </div>
                 </div>
 
-                <div id="over0-status-badge" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-slate-950 text-slate-400 border border-slate-800 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-slate-500"></span>
-                    <span id="over0-status-text">IDLE</span>
+                <div id="left-badge" class="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-slate-950 text-slate-400 border border-slate-800 flex items-center gap-1.5">
+                    <span id="left-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+                    <span id="left-badge-text">IDLE</span>
                 </div>
             </div>
 
-            <!-- URL Loader & Control Bar -->
-            <div class="p-3.5 bg-slate-950/60 border-b border-slate-800/80 space-y-3">
+            <!-- Configuration Controls -->
+            <div class="p-3 bg-slate-950/80 border-b border-slate-800/80 space-y-2.5">
+                <!-- Vercel URL Loader -->
                 <div class="flex gap-2">
                     <div class="relative flex-1">
-                        <i class="fa-solid fa-link absolute left-3 top-3 text-slate-500 text-xs"></i>
-                        <input type="text" id="left-url-input" value="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" class="w-full bg-slate-900 border border-slate-800 focus:border-emerald-500/50 text-xs text-slate-200 pl-8 pr-3 py-2 rounded-lg font-mono outline-none transition" placeholder="Paste Deriv Bot URL" />
-                    </div>
-                    <button onclick="loadIframe('left')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-rotate text-emerald-400"></i> Load App
-                    </button>
-                </div>
-
-                <!-- Parameters Grid -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Target Digit</label>
-                        <input type="text" value="0 (Over 0)" readonly class="w-full bg-slate-950 text-emerald-400 font-mono font-bold text-xs p-1.5 rounded border border-emerald-500/20 outline-none" />
-                    </div>
-                    <div class="bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Stake ($)</label>
-                        <input type="number" id="left-stake-input" value="1.00" min="0.35" step="0.5" class="w-full bg-slate-950 text-slate-100 font-mono font-bold text-xs p-1.5 rounded border border-slate-700 focus:border-emerald-500 outline-none" />
-                    </div>
-                    <div class="bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ticks</label>
-                        <input type="text" value="1 Tick" readonly class="w-full bg-slate-950 text-slate-300 font-mono font-bold text-xs p-1.5 rounded border border-slate-800 outline-none" />
-                    </div>
-                </div>
-
-                <!-- Live Performance Dashboard -->
-                <div class="grid grid-cols-4 gap-2 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">WINS</span>
-                        <span id="over0-wins" class="text-sm font-extrabold font-mono text-emerald-400">0</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">LOSSES</span>
-                        <span id="over0-losses" class="text-sm font-extrabold font-mono text-rose-400">0</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">WIN RATE</span>
-                        <span id="over0-winrate" class="text-sm font-extrabold font-mono text-cyan-400">0%</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">NET P/L</span>
-                        <span id="over0-profit" class="text-sm font-extrabold font-mono text-emerald-400">$0.00</span>
-                    </div>
-                </div>
-
-                <!-- Control Buttons -->
-                <div class="flex gap-2">
-                    <button id="btn-toggle-over0" onclick="toggleOver0Bot()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-emerald-950/40 border border-emerald-400/30 transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-play"></i> START OVER 0 BOT
-                    </button>
-                    <button onclick="resetStats('over0')" class="px-3 py-3 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-semibold rounded-xl border border-slate-800 transition" title="Clear Statistics">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Large Interactive Viewport (Embedded Vercel Bot) -->
-            <div id="viewport-left-container" class="flex-1 relative min-h-[420px] bg-slate-950 border-t border-slate-800 transition-all duration-200">
-                <iframe id="iframe-left" src="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" class="w-full h-full min-h-[420px] border-none"></iframe>
-                
-                <!-- Trade Action Flash overlay -->
-                <div id="flash-overlay-left" class="pointer-events-none absolute inset-0 border-4 border-transparent transition-all"></div>
-            </div>
-
-            <!-- Execution Logs -->
-            <div class="p-2.5 bg-slate-950 border-t border-slate-800 font-mono text-[11px] h-24 overflow-y-auto space-y-1" id="logs-over0">
-                <div class="text-slate-500">[System] Over 0 Automated Engine Standby.</div>
-            </div>
-
-        </section>
-
-        <!-- ================================================================= -->
-        <!-- RIGHT PANEL: UNDER 9 AUTOMATED STRATEGY                            -->
-        <!-- ================================================================= -->
-        <section id="panel-under9-container" class="flex flex-col bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 shadow-2xl overflow-hidden transition-all duration-300">
-            
-            <!-- Panel Header -->
-            <div class="p-4 bg-gradient-to-r from-rose-950/40 via-slate-900 to-slate-900 border-b border-slate-800 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold text-lg">
-                        <i class="fa-solid fa-arrow-trend-down"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-extrabold text-sm sm:text-base text-slate-100 flex items-center gap-2">
-                            RIGHT SECTION: UNDER 9 TRADER
-                            <span class="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">FIXED: UNDER 9</span>
-                        </h2>
-                        <p class="text-xs text-slate-400">Triggers trade continuously when digit <b class="text-rose-400">9</b> appears</p>
-                    </div>
-                </div>
-
-                <div id="under9-status-badge" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-slate-950 text-slate-400 border border-slate-800 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-slate-500"></span>
-                    <span id="under9-status-text">IDLE</span>
-                </div>
-            </div>
-
-            <!-- URL Loader & Control Bar -->
-            <div class="p-3.5 bg-slate-950/60 border-b border-slate-800/80 space-y-3">
-                <div class="flex gap-2">
-                    <div class="relative flex-1">
-                        <i class="fa-solid fa-link absolute left-3 top-3 text-slate-500 text-xs"></i>
-                        <input type="text" id="right-url-input" value="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" class="w-full bg-slate-900 border border-slate-800 focus:border-rose-500/50 text-xs text-slate-200 pl-8 pr-3 py-2 rounded-lg font-mono outline-none transition" placeholder="Paste Deriv Bot URL" />
-                    </div>
-                    <button onclick="loadIframe('right')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-rotate text-rose-400"></i> Load App
-                    </button>
-                </div>
-
-                <!-- Parameters Grid -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Target Digit</label>
-                        <input type="text" value="9 (Under 9)" readonly class="w-full bg-slate-950 text-rose-400 font-mono font-bold text-xs p-1.5 rounded border border-rose-500/20 outline-none" />
-                    </div>
-                    <div class="bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Stake ($)</label>
-                        <input type="number" id="right-stake-input" value="1.00" min="0.35" step="0.5" class="w-full bg-slate-950 text-slate-100 font-mono font-bold text-xs p-1.5 rounded border border-slate-700 focus:border-rose-500 outline-none" />
-                    </div>
-                    <div class="bg-slate-900/90 p-2 rounded-lg border border-slate-800">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ticks</label>
-                        <input type="text" value="1 Tick" readonly class="w-full bg-slate-950 text-slate-300 font-mono font-bold text-xs p-1.5 rounded border border-slate-800 outline-none" />
-                    </div>
-                </div>
-
-                <!-- Live Performance Dashboard -->
-                <div class="grid grid-cols-4 gap-2 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80">
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">WINS</span>
-                        <span id="under9-wins" class="text-sm font-extrabold font-mono text-emerald-400">0</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">LOSSES</span>
-                        <span id="under9-losses" class="text-sm font-extrabold font-mono text-rose-400">0</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">WIN RATE</span>
-                        <span id="under9-winrate" class="text-sm font-extrabold font-mono text-cyan-400">0%</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="block text-[10px] text-slate-400 font-medium">NET P/L</span>
-                        <span id="under9-profit" class="text-sm font-extrabold font-mono text-emerald-400">$0.00</span>
-                    </div>
-                </div>
-
-                <!-- Control Buttons -->
-                <div class="flex gap-2">
-                    <button id="btn-toggle-under9" onclick="toggleUnder9Bot()" class="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-rose-950/40 border border-rose-400/30 transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-play"></i> START UNDER 9 BOT
-                    </button>
-                    <button onclick="resetStats('under9')" class="px-3 py-3 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-semibold rounded-xl border border-slate-800 transition" title="Clear Statistics">
-                        <i class="fa-solid fa-rotate-left"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Large Interactive Viewport (Embedded Vercel Bot) -->
-            <div id="viewport-right-container" class="flex-1 relative min-h-[420px] bg-slate-950 border-t border-slate-800 transition-all duration-200">
-                <iframe id="iframe-right" src="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" class="w-full h-full min-h-[420px] border-none"></iframe>
-                
-                <!-- Trade Action Flash overlay -->
-                <div id="flash-overlay-right" class="pointer-events-none absolute inset-0 border-4 border-transparent transition-all"></div>
-            </div>
-
-            <!-- Execution Logs -->
-            <div class="p-2.5 bg-slate-950 border-t border-slate-800 font-mono text-[11px] h-24 overflow-y-auto space-y-1" id="logs-under9">
-                <div class="text-slate-500">[System] Under 9 Automated Engine Standby.</div>
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- AUTOMATION JAVASCRIPT ENGINE -->
-    <script>
-        // Global Terminal State
-        const state = {
-            over0Running: false,
-            under9Running: false,
-            lastProcessedDigit: null,
-            
-            over0Stats: { wins: 0, losses: 0, profit: 0.00 },
-            under9Stats: { wins: 0, losses: 0, profit: 0.00 },
-            
-            ws: null,
-            fallbackTimer: null
-        };
-
-        // Initialize Web Application
-        window.onload = () => {
-            initWebSocket();
-        };
-
-        // WebSocket Connection to Deriv Volatility 100 Index (R_100) Ticks
-        function initWebSocket() {
-            const wsUrl = 'wss://ws.derivws.com/websockets/v3?app_id=1089';
-            updateWsStatus('CONNECTING...', 'bg-amber-500');
-
-            try {
-                state.ws = new WebSocket(wsUrl);
-
-                state.ws.onopen = () => {
-                    updateWsStatus('DERIV WS: CONNECTED', 'bg-emerald-500');
-                    if (state.fallbackTimer) clearInterval(state.fallbackTimer);
-
-                    // Subscribe to Volatility 100 Index ticks
-                    state.ws.send(JSON.stringify({
-                        ticks: 'R_100'
-                    }));
-                };
-
-                state.ws.onmessage = (event) => {
-                    const response = JSON.parse(event.data);
-                    if (response.msg_type === 'tick' && response.tick) {
-                        const quoteStr = response.tick.quote.toString();
-                        const lastDigit = parseInt(quoteStr.slice(-1), 10);
-                        processIncomingTick(lastDigit);
-                    }
-                };
-
-                state.ws.onerror = () => {
-                    startFallbackGenerator();
-                };
-
-                state.ws.onclose = () => {
-                    updateWsStatus('WS OFFLINE (SIMULATING)', 'bg-rose-500');
-                    startFallbackGenerator();
-                };
-
-            } catch (err) {
-                startFallbackGenerator();
-            }
-        }
-
-        // Fallback Tick Generator if offline or CORS blocked
-        function startFallbackGenerator() {
-            if (state.fallbackTimer) return;
-            updateWsStatus('TICK FEED: ACTIVE (LIVE)', 'bg-emerald-500');
-
-            state.fallbackTimer = setInterval(() => {
-                const randomDigit = Math.floor(Math.random() * 10);
-                processIncomingTick(randomDigit);
-            }, 1000);
-        }
-
-        function updateWsStatus(text, bgClass) {
-            document.getElementById('ws-status').innerText = text;
-            const dot = document.getElementById('ws-dot');
-            dot.className = `relative inline-flex rounded-full h-3 w-3 ${bgClass}`;
-        }
-
-        // Handle Live Tick Stream & Trigger Automated Executions
-        function processIncomingTick(digit) {
-            // Update Top Header Display
-            const headerDigit = document.getElementById('header-last-digit');
-            headerDigit.innerText = digit;
-
-            if (digit === 0) {
-                headerDigit.className = 'text-xl font-bold font-mono text-emerald-400 bg-emerald-950/80 px-3 py-0.5 rounded-lg border border-emerald-500/50 min-w-[36px] text-center shadow-lg shadow-emerald-950';
-            } else if (digit === 9) {
-                headerDigit.className = 'text-xl font-bold font-mono text-rose-400 bg-rose-950/80 px-3 py-0.5 rounded-lg border border-rose-500/50 min-w-[36px] text-center shadow-lg shadow-rose-950';
-            } else {
-                headerDigit.className = 'text-xl font-bold font-mono text-cyan-400 bg-slate-950 px-3 py-0.5 rounded-lg border border-cyan-500/30 min-w-[36px] text-center';
-            }
-
-            // Append to dynamic ticker history bar
-            appendTickHistory(digit);
-
-            // Avoid double triggers on identical ticks
-            if (digit === state.lastProcessedDigit) return;
-
-            // ==========================================
-            // STRATEGY 1: OVER 0 TRIGGER (On Digit 0)
-            // ==========================================
-            if (state.over0Running && digit === 0) {
-                state.lastProcessedDigit = digit;
-                executeTradeOver0();
-            }
-
-            // ==========================================
-            // STRATEGY 2: UNDER 9 TRIGGER (On Digit 9)
-            // ==========================================
-            if (state.under9Running && digit === 9) {
-                state.lastProcessedDigit = digit;
-                executeTradeUnder9();
-            }
-
-            if (digit !== 0 && digit !== 9) {
-                state.lastProcessedDigit = null;
-            }
-        }
-
-        // Execute Over 0 Automation Logic
-        function executeTradeOver0() {
-            const stake = parseFloat(document.getElementById('left-stake-input').value) || 1.0;
-            
-            // Visual trigger feedback on Left Viewport
-            const overlay = document.getElementById('flash-overlay-left');
-            overlay.className = 'pointer-events-none absolute inset-0 border-4 border-emerald-500 click-flash-green';
-            setTimeout(() => { overlay.className = 'pointer-events-none absolute inset-0 border-4 border-transparent'; }, 600);
-
-            // Simulate immediate result based on Over 0 odds (~90% win rate for digit > 0)
-            const isWin = Math.random() <= 0.90;
-            const payout = isWin ? (stake * 0.09) : -stake;
-
-            state.over0Stats.wins += isWin ? 1 : 0;
-            state.over0Stats.losses += isWin ? 0 : 1;
-            state.over0Stats.profit += payout;
-
-            updateStatsUI('over0');
-            logEvent('over0', `[EXECUTE] BUY OVER 0 triggered on Digit 0! Stake: $${stake.toFixed(2)} -> ${isWin ? '<b class="text-emerald-400">WIN (+$' + payout.toFixed(2) + ')</b>' : '<b class="text-rose-400">LOSS (-$' + stake.toFixed(2) + ')</b>'}`);
-        }
-
-        // Execute Under 9 Automation Logic
-        function executeTradeUnder9() {
-            const stake = parseFloat(document.getElementById('right-stake-input').value) || 1.0;
-            
-            // Visual trigger feedback on Right Viewport
-            const overlay = document.getElementById('flash-overlay-right');
-            overlay.className = 'pointer-events-none absolute inset-0 border-4 border-rose-500 click-flash-red';
-            setTimeout(() => { overlay.className = 'pointer-events-none absolute inset-0 border-4 border-transparent'; }, 600);
-
-            // Simulate immediate result based on Under 9 odds (~90% win rate for digit < 9)
-            const isWin = Math.random() <= 0.90;
-            const payout = isWin ? (stake * 0.09) : -stake;
-
-            state.under9Stats.wins += isWin ? 1 : 0;
-            state.under9Stats.losses += isWin ? 0 : 1;
-            state.under9Stats.profit += payout;
-
-            updateStatsUI('under9');
-            logEvent('under9', `[EXECUTE] BUY UNDER 9 triggered on Digit 9! Stake: $${stake.toFixed(2)} -> ${isWin ? '<b class="text-emerald-400">WIN (+$' + payout.toFixed(2) + ')</b>' : '<b class="text-rose-400">LOSS (-$' + stake.toFixed(2) + ')</b>'}`);
-        }
-
-        // Update Performance Dashboards
-        function updateStatsUI(side) {
-            if (side === 'over0') {
-                const total = state.over0Stats.wins + state.over0Stats.losses;
-                const winrate = total > 0 ? ((state.over0Stats.wins / total) * 100).toFixed(1) : 0;
-
-                document.getElementById('over0-wins').innerText = state.over0Stats.wins;
-                document.getElementById('over0-losses').innerText = state.over0Stats.losses;
-                document.getElementById('over0-winrate').innerText = `${winrate}%`;
-                
-                const profEl = document.getElementById('over0-profit');
-                profEl.innerText = `$${state.over0Stats.profit.toFixed(2)}`;
-                profEl.className = `text-sm font-extrabold font-mono ${state.over0Stats.profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-            } else {
-                const total = state.under9Stats.wins + state.under9Stats.losses;
-                const winrate = total > 0 ? ((state.under9Stats.wins / total) * 100).toFixed(1) : 0;
-
-                document.getElementById('under9-wins').innerText = state.under9Stats.wins;
-                document.getElementById('under9-losses').innerText = state.under9Stats.losses;
-                document.getElementById('under9-winrate').innerText = `${winrate}%`;
-                
-                const profEl = document.getElementById('under9-profit');
-                profEl.innerText = `$${state.under9Stats.profit.toFixed(2)}`;
-                profEl.className = `text-sm font-extrabold font-mono ${state.under9Stats.profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-            }
-        }
-
-        // Toggle Buttons
-        function toggleOver0Bot() {
-            state.over0Running = !state.over0Running;
-            const btn = document.getElementById('btn-toggle-over0');
-            const badge = document.getElementById('over0-status-badge');
-            const statusText = document.getElementById('over0-status-text');
-
-            if (state.over0Running) {
-                btn.innerHTML = `<i class="fa-solid fa-square"></i> STOP OVER 0 BOT`;
-                btn.className = 'flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-rose-950/40 border border-rose-400/30 transition pulse-active-emerald';
-                
-                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center gap-2';
-                statusText.innerText = 'RUNNING (OVER 0)';
-                logEvent('over0', '[START] Over 0 Scanner Activated. Waiting for Digit 0...');
-            } else {
-                btn.innerHTML = `<i class="fa-solid fa-play"></i> START OVER 0 BOT`;
-                btn.className = 'flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-emerald-950/40 border border-emerald-400/30 transition';
-                
-                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-slate-950 text-slate-400 border border-slate-800 flex items-center gap-2';
-                statusText.innerText = 'IDLE';
-                logEvent('over0', '[STOP] Over 0 Scanner Paused.');
-            }
-        }
-
-        function toggleUnder9Bot() {
-            state.under9Running = !state.under9Running;
-            const btn = document.getElementById('btn-toggle-under9');
-            const badge = document.getElementById('under9-status-badge');
-            const statusText = document.getElementById('under9-status-text');
-
-            if (state.under9Running) {
-                btn.innerHTML = `<i class="fa-solid fa-square"></i> STOP UNDER 9 BOT`;
-                btn.className = 'flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-extrabold text-xs uppercase tracking-wider rounded-xl border border-slate-700 transition pulse-active-rose';
-                
-                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center gap-2';
-                statusText.innerText = 'RUNNING (UNDER 9)';
-                logEvent('under9', '[START] Under 9 Scanner Activated. Waiting for Digit 9...');
-            } else {
-                btn.innerHTML = `<i class="fa-solid fa-play"></i> START UNDER 9 BOT`;
-                btn.className = 'flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-rose-950/40 border border-rose-400/30 transition';
-                
-                badge.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-slate-950 text-slate-400 border border-slate-800 flex items-center gap-2';
-                statusText.innerText = 'IDLE';
-                logEvent('under9', '[STOP] Under 9 Scanner Paused.');
-            }
-        }
-
-        function emergencyStopAll() {
-            if (state.over0Running) toggleOver0Bot();
-            if (state.under9Running) toggleUnder9Bot();
-        }
-
-        function resetStats(side) {
-            if (side === 'over0') {
-                state.over0Stats = { wins: 0, losses: 0, profit: 0.00 };
-                updateStatsUI('over0');
-                logEvent('over0', '[RESET] Over 0 statistics cleared.');
-            } else {
-                state.under9Stats = { wins: 0, losses: 0, profit: 0.00 };
-                updateStatsUI('under9');
-                logEvent('under9', '[RESET] Under 9 statistics cleared.');
-            }
-        }
-
-        function loadIframe(side) {
-            const urlInput = document.getElementById(`${side}-url-input`).value;
-            const iframe = document.getElementById(`iframe-${side}`);
-            if (urlInput && iframe) {
-                iframe.src = urlInput;
-                logEvent(side === 'left' ? 'over0' : 'under9', `[URL] Loaded: ${urlInput}`);
-            }
-        }
-
-        function logEvent(target, text) {
-            const container = document.getElementById(`logs-${target}`);
-            if (!container) return;
-            const time = new Date().toLocaleTimeString();
-            const logItem = document.createElement('div');
-            logItem.innerHTML = `<span class="text-slate-500">[${time}]</span> ${text}`;
-            container.appendChild(logItem);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function clearAllLogs() {
-            document.getElementById('logs-over0').innerHTML = `<div class="text-slate-500">[System] Logs Cleared.</div>`;
-            document.getElementById('logs-under9').innerHTML = `<div class="text-slate-500">[System] Logs Cleared.</div>`;
-        }
-
-        function appendTickHistory(digit) {
-            const historyBar = document.getElementById('digit-history-bar');
-            if (!historyBar) return;
-
-            const el = document.createElement('span');
-            el.className = `w-5 h-5 flex items-center justify-center rounded text-[10px] font-bold ${
-                digit === 0 ? 'bg-emerald-500 text-slate-950' :
-                digit === 9 ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-300'
-            }`;
-            el.innerText = digit;
-
-            historyBar.appendChild(el);
-            if (historyBar.children.length > 10) {
-                historyBar.removeChild(historyBar.firstChild);
-            }
-        }
-    </script>
-</body>
-</html>
+                        <i class="fa-solid fa-link absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                        <input type="text" id="left-url" value="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" class
