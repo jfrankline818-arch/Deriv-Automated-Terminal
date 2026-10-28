@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deriv Dual-Panel Automated Terminal (Over 0 & Under 9)</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #090d16; color: #f8fafc; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        header { background: #0f172a; border-bottom: 1px solid #1e293b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-size: 18px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        .global-ticker { font-size: 13px; color: #94a3b8; background: #1e293b; padding: 4px 12px; border-radius: 6px; }
+
+        .main-container { display: flex; flex: 1; gap: 12px; padding: 12px; height: calc(100vh - 55px); }
+
+        /* Panel Common Styling */
+        .panel { flex: 1; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .panel-header { padding: 12px 16px; font-weight: bold; font-size: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; }
+        .panel-header.left-theme { background: rgba(16, 185, 129, 0.1); color: #34d399; border-color: rgba(16, 185, 129, 0.3); }
+        .panel-header.right-theme { background: rgba(239, 68, 68, 0.1); color: #f87171; border-color: rgba(239, 68, 68, 0.3); }
+
+        /* Controls Section */
+        .controls-box { padding: 12px; background: #111827; border-bottom: 1px solid #1f2937; display: flex; flex-direction: column; gap: 8px; }
+        .input-row { display: flex; gap: 8px; align-items: center; }
+        .input-group { flex: 1; }
+        .input-group label { display: block; font-size: 10px; color: #9ca3af; margin-bottom: 2px; text-transform: uppercase; }
+        .input-group input, .input-group select { width: 100%; background: #1f2937; border: 1px solid #374151; color: #fff; padding: 6px 8px; border-radius: 6px; font-size: 12px; }
+        
+        .url-row { display: flex; gap: 6px; }
+        .url-row input { flex: 1; background: #1f2937; border: 1px solid #374151; color: #fff; padding: 6px 8px; border-radius: 6px; font-size: 11px; }
+        .btn-load { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
+
+        /* Dashboard Stats Row */
+        .stats-row { display: flex; justify-content: space-between; background: #1e293b; padding: 8px 12px; border-radius: 6px; font-size: 11px; align-items: center; }
+        .stat-val { font-weight: bold; font-size: 12px; }
+
+        /* Action Buttons */
+        .btn-action { width: 100%; padding: 10px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; text-transform: uppercase; transition: 0.2s; }
+        .btn-start-over0 { background: #10b981; color: #fff; }
+        .btn-start-over0.active { background: #047857; animation: pulse 1.5s infinite; }
+        .btn-start-under9 { background: #ef4444; color: #fff; }
+        .btn-start-under9.active { background: #b91c1c; animation: pulse 1.5s infinite; }
+
+        /* Iframe Bot Stream Viewport */
+        .iframe-container { flex: 1; position: relative; background: #fff; }
+        .iframe-container iframe { width: 100%; height: 100%; border: none; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⚡ Deriv Dual-Panel Automated Terminal</h1>
+        <div class="global-ticker" id="globalStatus">Status: Both Panels Ready</div>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- ================= LEFT SECTION: OVER 0 ================= -->
+        <div class="panel">
+            <div class="panel-header left-theme">
+                <span>Left Section: Over 0 Strategy</span>
+                <span id="leftStateBadge" style="font-size: 11px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px;">IDLE</span>
+            </div>
+
+            <div class="controls-box">
+                <!-- Deriv Bot Link Input -->
+                <div class="url-row">
+                    <input type="text" id="leftUrl" value="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" placeholder="Paste Deriv Bot Link Here" />
+                    <button class="btn-load" onclick="loadBot('left')">Load Bot</button>
+                </div>
+
+                <!-- Parameters -->
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Stake ($)</label>
+                        <input type="number" id="leftStake" value="1.00" step="0.5" />
+                    </div>
+                    <div class="input-group">
+                        <label>Ticks</label>
+                        <input type="number" id="leftTicks" value="1" readonly />
+                    </div>
+                    <div class="input-group">
+                        <label>Target Digit</label>
+                        <input type="text" value="Over 0" readonly style="color: #34d399; font-weight: bold;" />
+                    </div>
+                </div>
+
+                <!-- Stats Dashboard -->
+                <div class="stats-row">
+                    <span>Wins: <strong id="leftWins" style="color: #34d399;">0</strong></span>
+                    <span>Losses: <strong id="leftLosses" style="color: #f87171;">0</strong></span>
+                    <span>Profit: <strong id="leftProfit" style="color: #34d399;">$0.00</strong></span>
+                    <button onclick="clearStats('left')" style="background: none; border: none; color: #94a3b8; cursor: pointer; text-decoration: underline; font-size: 10px;">Clear Stats</button>
+                </div>
+
+                <!-- Start / Stop Button -->
+                <button id="leftBtnToggle" class="btn-action btn-start-over0" onclick="toggleBot('left')">Start Over 0 Bot</button>
+            </div>
+
+            <!-- Large Interactive Bot Stream Box -->
+            <div class="iframe-container">
+                <iframe id="leftFrame" src="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app"></iframe>
+            </div>
+        </div>
+
+        <!-- ================= RIGHT SECTION: UNDER 9 ================= -->
+        <div class="panel">
+            <div class="panel-header right-theme">
+                <span>Right Section: Under 9 Strategy</span>
+                <span id="rightStateBadge" style="font-size: 11px; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px;">IDLE</span>
+            </div>
+
+            <div class="controls-box">
+                <!-- Deriv Bot Link Input -->
+                <div class="url-row">
+                    <input type="text" id="rightUrl" value="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app" placeholder="Paste Deriv Bot Link Here" />
+                    <button class="btn-load" onclick="loadBot('right')">Load Bot</button>
+                </div>
+
+                <!-- Parameters -->
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Stake ($)</label>
+                        <input type="number" id="rightStake" value="1.00" step="0.5" />
+                    </div>
+                    <div class="input-group">
+                        <label>Ticks</label>
+                        <input type="number" id="rightTicks" value="1" readonly />
+                    </div>
+                    <div class="input-group">
+                        <label>Target Digit</label>
+                        <input type="text" value="Under 9" readonly style="color: #f87171; font-weight: bold;" />
+                    </div>
+                </div>
+
+                <!-- Stats Dashboard -->
+                <div class="stats-row">
+                    <span>Wins: <strong id="rightWins" style="color: #34d399;">0</strong></span>
+                    <span>Losses: <strong id="rightLosses" style="color: #f87171;">0</strong></span>
+                    <span>Profit: <strong id="rightProfit" style="color: #34d399;">$0.00</strong></span>
+                    <button onclick="clearStats('right')" style="background: none; border: none; color: #94a3b8; cursor: pointer; text-decoration: underline; font-size: 10px;">Clear Stats</button>
+                </div>
+
+                <!-- Start / Stop Button -->
+                <button id="rightBtnToggle" class="btn-action btn-start-under9" onclick="toggleBot('right')">Start Under 9 Bot</button>
+            </div>
+
+            <!-- Large Interactive Bot Stream Box -->
+            <div class="iframe-container">
+                <iframe id="rightFrame" src="https://digits-vercel-app-jfrankline818-5212s-projects.vercel.app"></iframe>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Bot control state trackers
+        let leftActive = false;
+        let rightActive = false;
+
+        let leftData = { wins: 0, losses: 0, profit: 0.00 };
+        let rightData = { wins: 0, losses: 0, profit: 0.00 };
+
+        function loadBot(side) {
+            const urlInput = document.getElementById(side + 'Url').value;
+            const iframe = document.getElementById(side + 'Frame');
+            if (urlInput) {
+                iframe.src = urlInput;
+            }
+        }
+
+        function toggleBot(side) {
+            if (side === 'left') {
+                leftActive = !leftActive;
+                const btn = document.getElementById('leftBtnToggle');
+                const badge = document.getElementById('leftStateBadge');
+                
+                if (leftActive) {
+                    btn.innerText = 'STOP Over 0 Bot';
+                    btn.classList.add('active');
+                    badge.innerText = 'RUNNING (Over 0)';
+                    badge.style.background = '#10b981';
+                } else {
+                    btn.innerText = 'Start Over 0 Bot';
+                    btn.classList.remove('active');
+                    badge.innerText = 'IDLE';
+                    badge.style.background = 'rgba(0,0,0,0.3)';
+                }
+            } else {
+                rightActive = !rightActive;
+                const btn = document.getElementById('rightBtnToggle');
+                const badge = document.getElementById('rightStateBadge');
+                
+                if (rightActive) {
+                    btn.innerText = 'STOP Under 9 Bot';
+                    btn.classList.add('active');
+                    badge.innerText = 'RUNNING (Under 9)';
+                    badge.style.background = '#ef4444';
+                } else {
+                    btn.innerText = 'Start Under 9 Bot';
+                    btn.classList.remove('active');
+                    badge.innerText = 'IDLE';
+                    badge.style.background = 'rgba(0,0,0,0.3)';
+                }
+            }
+        }
+
+        function clearStats(side) {
+            if (side === 'left') {
+                leftData = { wins: 0, losses: 0, profit: 0.00 };
+                document.getElementById('leftWins').innerText = '0';
+                document.getElementById('leftLosses').innerText = '0';
+                document.getElementById('leftProfit').innerText = '$0.00';
+            } else {
+                rightData = { wins: 0, losses: 0, profit: 0.00 };
+                document.getElementById('rightWins').innerText = '0';
+                document.getElementById('rightLosses').innerText = '0';
+                document.getElementById('rightProfit').innerText = '$0.00';
+            }
+        }
+    </script>
+</body>
+</html>
